@@ -1,0 +1,12 @@
+{
+  "name": "GPanel - MacOS Style Top Bar",
+  "description": "Transforms the GNOME top bar into a fully-fledged macOS-style menu bar with notch support, global menus, and deep customization.",
+  "uuid": "gpanel@ziyaadsmada.github.com",
+  "shell-version": [
+    "46",
+    "47"
+  ],
+  "url": "https://github.com/ziyaadsmada/gpanel",
+  "settings-schema": "org.gnome.shell.extensions.gpanel",
+  "version": 1
+}
