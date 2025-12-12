@@ -48,26 +48,34 @@ class TrafficLightsManager {
     }
 
     _createWidget() {
-        this._container = new St.BoxLayout({
-            style_class: 'gpanel-traffic-lights',
-            vertical: false,
-            y_align: Clutter.ActorAlign.CENTER
-        });
-
-        const actions = ['close', 'minimize', 'maximize'];
-        actions.forEach(action => {
-            let btn = new St.Button({
-                style_class: `gpanel-traffic-light ${action}`,
-                can_focus: true,
-                reactive: true
+        try {
+            this._container = new St.BoxLayout({
+                style_class: 'gpanel-traffic-lights',
+                vertical: false,
+                y_align: Clutter.ActorAlign.CENTER
             });
-            
-            btn.connect('clicked', () => this._handleAction(action));
-            this._container.add_child(btn);
-        });
 
-        let leftBox = Main.panel._leftBox;
-        leftBox.insert_child_at_index(this._container, 0);
+            const actions = ['close', 'minimize', 'maximize'];
+            actions.forEach(action => {
+                let btn = new St.Button({
+                    style_class: `gpanel-traffic-light ${action}`,
+                    can_focus: true,
+                    reactive: true
+                });
+                
+                btn.connect('clicked', () => this._handleAction(action));
+                this._container.add_child(btn);
+            });
+
+            let leftBox = Main.panel._leftBox;
+            if (leftBox) {
+                leftBox.insert_child_at_index(this._container, 0);
+            } else {
+                console.error('GPanel: Main.panel._leftBox not found');
+            }
+        } catch (e) {
+            console.error('GPanel: Error creating traffic lights', e);
+        }
     }
 
     _handleAction(action) {
@@ -227,31 +235,37 @@ class AppMenuManager {
     }
 
     _createWidget() {
-        this._container = new St.BoxLayout({
-            style_class: 'gpanel-app-menu',
-            vertical: false,
-            y_align: Clutter.ActorAlign.CENTER
-        });
+        try {
+            this._container = new St.BoxLayout({
+                style_class: 'gpanel-app-menu',
+                vertical: false,
+                y_align: Clutter.ActorAlign.CENTER
+            });
 
-        this._appLabel = new St.Label({
-            text: 'Finder',
-            style_class: 'gpanel-app-menu-label',
-            y_align: Clutter.ActorAlign.CENTER
-        });
+            this._appLabel = new St.Label({
+                text: 'Finder',
+                style_class: 'gpanel-app-menu-label',
+                y_align: Clutter.ActorAlign.CENTER
+            });
 
-        this._globalMenuBox = new St.BoxLayout({
-            style_class: 'gpanel-global-menu-box',
-            vertical: false,
-            y_align: Clutter.ActorAlign.CENTER
-        });
+            this._globalMenuBox = new St.BoxLayout({
+                style_class: 'gpanel-global-menu-box',
+                vertical: false,
+                y_align: Clutter.ActorAlign.CENTER
+            });
 
-        this._container.add_child(this._appLabel);
-        this._container.add_child(this._globalMenuBox);
+            this._container.add_child(this._appLabel);
+            this._container.add_child(this._globalMenuBox);
 
-        let leftBox = Main.panel._leftBox;
-        leftBox.add_child(this._container);
-        
-        this._updateGlobalMenu();
+            let leftBox = Main.panel._leftBox;
+            if (leftBox) {
+                leftBox.add_child(this._container);
+            }
+            
+            this._updateGlobalMenu();
+        } catch (e) {
+            console.error('GPanel: Error creating app menu', e);
+        }
     }
 
     _updateVisibility() {
@@ -266,8 +280,6 @@ class AppMenuManager {
         this._globalMenuBox.destroy_all_children();
         
         if (this._settings.get_boolean(SETTINGS_KEY_ENABLE_GLOBAL_MENU)) {
-            // Mock Global Menu Items for visual parity
-            // In a real implementation, this would connect to DBus
             const items = ['File', 'Edit', 'View', 'Window', 'Help'];
             items.forEach(label => {
                 let btn = new St.Button({
@@ -322,6 +334,10 @@ class DockManager {
             this._dock.destroy();
             this._dock = null;
         }
+        if (this._dockContainer) {
+            this._dockContainer.destroy();
+            this._dockContainer = null;
+        }
         if (this._settings) {
             if (this._settingsSignal) this._settings.disconnect(this._settingsSignal);
             if (this._sizeSignal) this._settings.disconnect(this._sizeSignal);
@@ -329,74 +345,88 @@ class DockManager {
     }
 
     _createDock() {
-        if (this._dock) this._dock.destroy();
+        try {
+            if (this._dock) this._dock.destroy();
 
-        this._dock = new St.BoxLayout({
-            style_class: 'gpanel-dock',
-            vertical: false,
-            reactive: true,
-            x_align: Clutter.ActorAlign.CENTER,
-            y_align: Clutter.ActorAlign.END
-        });
+            this._dock = new St.BoxLayout({
+                style_class: 'gpanel-dock',
+                vertical: false,
+                reactive: true,
+                x_align: Clutter.ActorAlign.CENTER,
+                y_align: Clutter.ActorAlign.END
+            });
 
-        this._dockContainer = new St.Bin({
-            style_class: 'gpanel-dock-container',
-            child: this._dock,
-            x_align: Clutter.ActorAlign.CENTER,
-            y_align: Clutter.ActorAlign.END,
-            width: this._monitor.width,
-            height: 100 // Approximate
-        });
+            this._dockContainer = new St.Bin({
+                style_class: 'gpanel-dock-container',
+                child: this._dock,
+                x_align: Clutter.ActorAlign.CENTER,
+                y_align: Clutter.ActorAlign.END,
+                width: this._monitor.width,
+                height: 100 // Approximate
+            });
 
-        Main.layoutManager.addChrome(this._dockContainer, {
-            affectsInputRegion: true,
-            trackFullscreen: true
-        });
-        
-        // Position at bottom
-        this._dockContainer.set_position(0, this._monitor.height - 100);
-        
-        this._populateDock();
+            Main.layoutManager.addChrome(this._dockContainer, {
+                affectsInputRegion: true,
+                trackFullscreen: true
+            });
+            
+            // Position at bottom
+            this._dockContainer.set_position(0, this._monitor.height - 100);
+            
+            this._populateDock();
+        } catch (e) {
+            console.error('GPanel: Error creating dock', e);
+        }
     }
 
     _populateDock() {
-        let iconSize = this._settings.get_int(SETTINGS_KEY_DOCK_ICON_SIZE);
-        let appSystem = Shell.AppSystem.get_default();
-        let favorites = AppFavorites.getAppFavorites().getFavorites();
+        try {
+            let iconSize = this._settings.get_int(SETTINGS_KEY_DOCK_ICON_SIZE);
+            
+            // Safe access to AppFavorites
+            let favorites = [];
+            if (AppFavorites.getAppFavorites) {
+                favorites = AppFavorites.getAppFavorites().getFavorites();
+            } else {
+                console.warn('GPanel: AppFavorites.getAppFavorites not found');
+            }
 
-        favorites.forEach(app => {
-            let icon = app.create_icon_texture(iconSize);
-            let btn = new St.Button({
+            favorites.forEach(app => {
+                let icon = app.create_icon_texture(iconSize);
+                let btn = new St.Button({
+                    style_class: 'gpanel-dock-item',
+                    child: icon,
+                    reactive: true,
+                    can_focus: true
+                });
+                
+                btn.connect('clicked', () => {
+                    app.activate();
+                });
+                
+                this._dock.add_child(btn);
+            });
+            
+            // Separator
+            let sep = new St.Widget({ style_class: 'gpanel-dock-separator', width: 1, height: iconSize });
+            this._dock.add_child(sep);
+            
+            // Show App Grid Button
+            let gridIcon = new St.Icon({
+                icon_name: 'view-app-grid-symbolic',
+                icon_size: iconSize
+            });
+            let gridBtn = new St.Button({
                 style_class: 'gpanel-dock-item',
-                child: icon,
-                reactive: true,
-                can_focus: true
+                child: gridIcon
             });
-            
-            btn.connect('clicked', () => {
-                app.activate();
+            gridBtn.connect('clicked', () => {
+                Main.overview.toggle();
             });
-            
-            this._dock.add_child(btn);
-        });
-        
-        // Separator
-        let sep = new St.Widget({ style_class: 'gpanel-dock-separator', width: 1, height: iconSize });
-        this._dock.add_child(sep);
-        
-        // Show App Grid Button
-        let gridIcon = new St.Icon({
-            icon_name: 'view-app-grid-symbolic',
-            icon_size: iconSize
-        });
-        let gridBtn = new St.Button({
-            style_class: 'gpanel-dock-item',
-            child: gridIcon
-        });
-        gridBtn.connect('clicked', () => {
-            Main.overview.toggle();
-        });
-        this._dock.add_child(gridBtn);
+            this._dock.add_child(gridBtn);
+        } catch (e) {
+            console.error('GPanel: Error populating dock', e);
+        }
     }
     
     _rebuildDock() {
@@ -415,52 +445,68 @@ class DockManager {
 
 export default class GPanelExtension extends Extension {
     enable() {
-        this._settings = this.getSettings();
-        
-        // Managers
-        this._trafficLights = new TrafficLightsManager();
-        this._notch = new NotchManager();
-        this._appMenu = new AppMenuManager();
-        this._dock = new DockManager();
-        
-        // Initialize Managers
-        this._trafficLights.enable(this._settings);
-        this._notch.enable(this._settings);
-        this._appMenu.enable(this._settings);
-        this._dock.enable(this._settings);
-        
-        // Panel Styling
-        this._updatePanelStyle();
-        this._settings.connect('changed::' + SETTINGS_KEY_PANEL_HEIGHT, () => this._updatePanelStyle());
-        this._settings.connect('changed::' + SETTINGS_KEY_PANEL_OPACITY, () => this._updatePanelStyle());
-        this._settings.connect('changed::' + SETTINGS_KEY_BLUR_EFFECT, () => this._updatePanelStyle());
+        console.log('GPanel: Enabling extension...');
+        try {
+            this._settings = this.getSettings();
+            
+            // Managers
+            this._trafficLights = new TrafficLightsManager();
+            this._notch = new NotchManager();
+            this._appMenu = new AppMenuManager();
+            this._dock = new DockManager();
+            
+            // Initialize Managers
+            this._trafficLights.enable(this._settings);
+            this._notch.enable(this._settings);
+            this._appMenu.enable(this._settings);
+            this._dock.enable(this._settings);
+            
+            // Panel Styling
+            this._updatePanelStyle();
+            this._settings.connect('changed::' + SETTINGS_KEY_PANEL_HEIGHT, () => this._updatePanelStyle());
+            this._settings.connect('changed::' + SETTINGS_KEY_PANEL_OPACITY, () => this._updatePanelStyle());
+            this._settings.connect('changed::' + SETTINGS_KEY_BLUR_EFFECT, () => this._updatePanelStyle());
+            
+            console.log('GPanel: Extension enabled successfully');
+        } catch (e) {
+            console.error('GPanel: Fatal error enabling extension', e);
+        }
     }
 
     disable() {
-        this._trafficLights.disable();
-        this._notch.disable();
-        this._appMenu.disable();
-        this._dock.disable();
-        
-        // Reset Panel Style
-        Main.panel.remove_style_class_name('gpanel-top-bar');
-        Main.panel.remove_style_class_name('blurred');
-        Main.panel.height = -1;
-        
-        this._settings = null;
+        console.log('GPanel: Disabling extension...');
+        try {
+            if (this._trafficLights) this._trafficLights.disable();
+            if (this._notch) this._notch.disable();
+            if (this._appMenu) this._appMenu.disable();
+            if (this._dock) this._dock.disable();
+            
+            // Reset Panel Style
+            Main.panel.remove_style_class_name('gpanel-top-bar');
+            Main.panel.remove_style_class_name('blurred');
+            Main.panel.height = -1;
+            
+            this._settings = null;
+        } catch (e) {
+            console.error('GPanel: Error disabling extension', e);
+        }
     }
     
     _updatePanelStyle() {
-        Main.panel.add_style_class_name('gpanel-top-bar');
-        
-        let height = this._settings.get_int(SETTINGS_KEY_PANEL_HEIGHT);
-        Main.panel.height = height;
-        
-        let blur = this._settings.get_boolean(SETTINGS_KEY_BLUR_EFFECT);
-        if (blur) {
-            Main.panel.add_style_class_name('blurred');
-        } else {
-            Main.panel.remove_style_class_name('blurred');
+        try {
+            Main.panel.add_style_class_name('gpanel-top-bar');
+            
+            let height = this._settings.get_int(SETTINGS_KEY_PANEL_HEIGHT);
+            Main.panel.height = height;
+            
+            let blur = this._settings.get_boolean(SETTINGS_KEY_BLUR_EFFECT);
+            if (blur) {
+                Main.panel.add_style_class_name('blurred');
+            } else {
+                Main.panel.remove_style_class_name('blurred');
+            }
+        } catch (e) {
+            console.error('GPanel: Error updating panel style', e);
         }
     }
 }
