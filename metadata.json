@@ -3,6 +3,11 @@
   "description": "Transforms the GNOME top bar into a fully-fledged macOS-style menu bar with notch support, global menus, and deep customization.",
   "uuid": "gpanel@ziyaadsmada.github.com",
   "shell-version": [
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
     "45",
     "46",
     "47",
@@ -10,5 +15,5 @@
   ],
   "url": "https://github.com/ziyaadsmada/gpanel",
   "settings-schema": "org.gnome.shell.extensions.gpanel",
-  "version": 1
+  "version": 2
 }

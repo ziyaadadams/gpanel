@@ -37,6 +37,21 @@ export default class GPanelPreferences extends ExtensionPreferences {
         settings.bind('blur-effect', blurRow, 'active', Gio.SettingsBindFlags.DEFAULT);
         groupAppearance.add(blurRow);
 
+        // Rounded Corners
+        const cornersRow = new Adw.SwitchRow({ title: _('Rounded Corners') });
+        settings.bind('panel-rounded-corners', cornersRow, 'active', Gio.SettingsBindFlags.DEFAULT);
+        groupAppearance.add(cornersRow);
+
+        // Corner Radius
+        const radiusRow = new Adw.ActionRow({ title: _('Corner Radius') });
+        const radiusScale = Gtk.Scale.new_with_range(Gtk.Orientation.HORIZONTAL, 0, 24, 1);
+        radiusScale.set_draw_value(true);
+        radiusScale.set_value_pos(Gtk.PositionType.RIGHT);
+        radiusScale.set_hexpand(true);
+        settings.bind('corner-radius', radiusScale.adjustment, 'value', Gio.SettingsBindFlags.DEFAULT);
+        radiusRow.add_suffix(radiusScale);
+        groupAppearance.add(radiusRow);
+
         // --- Features Group ---
         const groupFeatures = new Adw.PreferencesGroup({ title: _('Panel Features') });
         page.add(groupFeatures);
@@ -93,6 +108,28 @@ export default class GPanelPreferences extends ExtensionPreferences {
         const dockHideRow = new Adw.SwitchRow({ title: _('Autohide Dock') });
         settings.bind('dock-autohide', dockHideRow, 'active', Gio.SettingsBindFlags.DEFAULT);
         groupDock.add(dockHideRow);
+
+        // Dock Magnification
+        const dockMagnifyRow = new Adw.SwitchRow({ title: _('Icon Magnification') });
+        dockMagnifyRow.set_subtitle(_('Enlarge icons on hover'));
+        settings.bind('dock-magnify', dockMagnifyRow, 'active', Gio.SettingsBindFlags.DEFAULT);
+        groupDock.add(dockMagnifyRow);
+
+        // Magnification Scale
+        const magnifyScaleRow = new Adw.ActionRow({ title: _('Magnification Scale') });
+        const magnifyScaleScale = Gtk.Scale.new_with_range(Gtk.Orientation.HORIZONTAL, 1.0, 2.5, 0.1);
+        magnifyScaleScale.set_draw_value(true);
+        magnifyScaleScale.set_value_pos(Gtk.PositionType.RIGHT);
+        magnifyScaleScale.set_hexpand(true);
+        settings.bind('dock-magnify-scale', magnifyScaleScale.adjustment, 'value', Gio.SettingsBindFlags.DEFAULT);
+        magnifyScaleRow.add_suffix(magnifyScaleScale);
+        groupDock.add(magnifyScaleRow);
+
+        // Running Indicators
+        const runningRow = new Adw.SwitchRow({ title: _('Show Running App Indicators') });
+        runningRow.set_subtitle(_('Display dots under running applications'));
+        settings.bind('show-running-indicators', runningRow, 'active', Gio.SettingsBindFlags.DEFAULT);
+        groupDock.add(runningRow);
 
         window.add(page);
     }

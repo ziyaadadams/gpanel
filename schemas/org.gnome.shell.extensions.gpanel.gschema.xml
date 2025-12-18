@@ -63,5 +63,47 @@
       <summary>Dock Autohide</summary>
       <description>Hide dock when overlapped by windows</description>
     </key>
+    <key name="dock-magnify" type="b">
+      <default>true</default>
+      <summary>Dock Magnification</summary>
+      <description>Enable icon magnification on hover</description>
+    </key>
+    <key name="dock-magnify-scale" type="d">
+      <default>1.5</default>
+      <summary>Magnification Scale</summary>
+      <description>How much to magnify icons on hover</description>
+    </key>
+    <key name="dock-position" type="s">
+      <default>"bottom"</default>
+      <summary>Dock Position</summary>
+      <description>Position of the dock (bottom, left, right)</description>
+    </key>
+    <key name="show-running-indicators" type="b">
+      <default>true</default>
+      <summary>Show Running App Indicators</summary>
+      <description>Show dots under running applications</description>
+    </key>
+    <key name="panel-rounded-corners" type="b">
+      <default>true</default>
+      <summary>Rounded Panel Corners</summary>
+      <description>Add rounded corners to the panel</description>
+    </key>
+    <key name="corner-radius" type="i">
+      <default>12</default>
+      <summary>Corner Radius</summary>
+      <description>Radius of panel corners in pixels</description>
+    </key>
+
+    <!-- Stage Manager Settings -->
+    <key name="enable-stage-manager" type="b">
+      <default>false</default>
+      <summary>Enable Stage Manager</summary>
+      <description>Enable the Stage Manager window management interface</description>
+    </key>
+    <key name="stage-manager-position" type="s">
+      <default>"left"</default>
+      <summary>Stage Manager Position</summary>
+      <description>Position of the stage strip (left, right)</description>
+    </key>
   </schema>
 </schemalist>

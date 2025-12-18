@@ -1,17 +1,28 @@
 /* Main Panel Styling */
 .gpanel-top-bar {
-    background-color: rgba(0, 0, 0, 0.2);
-    box-shadow: none;
+    background-color: rgba(30, 30, 30, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
     transition-duration: 250ms;
 }
 
 .gpanel-top-bar.blurred {
-    background-color: rgba(20, 20, 20, 0.65);
+    background-color: rgba(20, 20, 20, 0.85);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+}
+
+.gpanel-top-bar.rounded-corners {
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    margin: 0 8px;
 }
 
 /* Remove default corners */
 .gpanel-top-bar .panel-corner {
     -panel-corner-radius: 0;
+    background: transparent;
 }
 
 /* Notch Styling */
@@ -45,35 +56,66 @@
     width: 12px;
     height: 12px;
     border-radius: 6px;
-    box-shadow: inset 0 0 2px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 2px rgba(0,0,0,0.3),
+                0 1px 1px rgba(255,255,255,0.2);
+    transition-duration: 150ms;
 }
 
-.gpanel-traffic-light.close { background-color: #ff5f57; }
-.gpanel-traffic-light.minimize { background-color: #febc2e; }
-.gpanel-traffic-light.maximize { background-color: #28c840; }
+.gpanel-traffic-light:hover {
+    transform: scale(1.15);
+}
+
+.gpanel-traffic-light:active {
+    transform: scale(0.95);
+}
+
+.gpanel-traffic-light.close { 
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff5f57 100%);
+}
+
+.gpanel-traffic-light.minimize { 
+    background: linear-gradient(135deg, #ffd93d 0%, #febc2e 100%);
+}
+
+.gpanel-traffic-light.maximize { 
+    background: linear-gradient(135deg, #33d17a 0%, #28c840 100%);
+}
 
 /* App Menu */
+.gpanel-app-menu {
+    spacing: 0;
+}
+
 .gpanel-app-menu-label {
-    font-weight: 800;
+    font-weight: 700;
     font-size: 14px;
-    margin-left: 8px;
+    margin-left: 10px;
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
 /* Global Menu */
 .gpanel-global-menu-box {
-    spacing: 12px;
-    margin-left: 12px;
+    spacing: 4px;
+    margin-left: 16px;
 }
 
 .gpanel-global-menu-item {
     font-weight: 500;
-    font-size: 14px;
-    padding: 0 4px;
+    font-size: 13px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.9);
+    transition-duration: 150ms;
 }
 
 .gpanel-global-menu-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+}
+
+.gpanel-global-menu-item:active {
+    background-color: rgba(255, 255, 255, 0.25);
 }
 
 /* Dock Styling */
@@ -83,34 +125,83 @@
 }
 
 .gpanel-dock {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 24px;
-    padding: 8px;
-    spacing: 8px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-radius: 20px;
+    padding: 12px 16px;
+    spacing: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4), 
+                0 0 0 1px rgba(255,255,255,0.1) inset;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.gpanel-dock-icon-container {
+    spacing: 2px;
 }
 
 .gpanel-dock-item {
     background-color: transparent;
-    border-radius: 12px;
+    border-radius: 16px;
+    padding: 8px;
     transition-duration: 200ms;
 }
 
 .gpanel-dock-item:hover {
     background-color: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
 }
 
 .gpanel-dock-item:active {
     background-color: rgba(255, 255, 255, 0.3);
-    transform: scale(0.95);
+    transform: scale(0.92);
+}
+
+.gpanel-dock-running-indicator {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 2px;
+    margin-top: 2px;
+    align-self: center;
 }
 
 .gpanel-dock-separator {
     width: 1px;
-    background-color: rgba(255, 255, 255, 0.3);
-    margin: 4px 0;
+    background-color: rgba(255, 255, 255, 0.25);
+    margin: 8px 4px;
+    border-radius: 1px;
+}
+
+.gpanel-dock-grid {
+    /* Special styling for app grid button */
+}
+
+/* Stage Manager */
+.gpanel-stage-strip {
+    background-color: rgba(30, 30, 30, 0.4);
+    border-radius: 16px;
+    margin: 12px;
+    padding: 12px;
+    spacing: 16px;
+}
+
+.gpanel-stage-item {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 12px;
+    transition-duration: 200ms;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.gpanel-stage-item:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.gpanel-stage-item:active {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.gpanel-stage-icon {
+    icon-size: 48px;
 }
 
 /* System Indicators */
@@ -119,19 +210,37 @@
 }
 
 .panel-button {
-    font-weight: 600;
-    -natural-hpadding: 10px;
+    font-weight: 500;
+    font-size: 13px;
+    -natural-hpadding: 12px;
+    -minimum-hpadding: 8px;
+    border-radius: 6px;
+    transition-duration: 150ms;
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .panel-button:hover {
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.12);
     box-shadow: none;
+    color: #ffffff;
 }
 
 .panel-button:active, 
 .panel-button:overview, 
 .panel-button:focus, 
 .panel-button:checked {
-    background-color: rgba(255, 255, 255, 0.25);
-    box-shadow: none;
+    background-color: rgba(255, 255, 255, 0.20);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    color: #ffffff;
+}
+
+/* Make icons in panel slightly more prominent */
+.panel-button .system-status-icon {
+    icon-size: 16px;
+}
+
+/* Clock styling to match macOS */
+.clock-display {
+    font-weight: 600;
+    font-size: 13px;
 }
